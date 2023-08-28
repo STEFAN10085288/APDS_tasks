@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<body>
+  <h2>Tell us about you</h2>
+  <form>
+    <div class="container">
+      <div>
+        <label for="name"><b>Name</b></label>
+        <input type="text" placeholder="Enter name" name="name" id="uName" max="50" required>
+      </div>
+
+      <div>
+        <label for="surname"><b>Surname</b></label>
+        <input type="text" placeholder="Enter surname" name="surname" id="uSurname" max="50" required>
+      </div>
+
+      <div>
+        <label for="phonenumber"><b>Phone number</b></label>
+        <input type="tel" placeholder="Enter phone number" name="phonenumber" id="uPhoneNumber" pattern="[0-9]{10}"
+          required>
+      </div>
+
+      <div>
+        <label for="birthday"><b>Birthday:</b></label>
+        <input type="date" id="uBirthday" name="birthday" min="1900-01-01" max="2100-01-01" required>
+      </div>
+
+      <div>
+        <label for="email"><b>Email</b></label>
+        <input type="email" placeholder="Enter email" name="email" id="uEmail" required>
+      </div>
+
+      <div>
+        <label for="social"><b>Instagram, Twitter, or LinkedIn URL</b></label>
+        <input type="url" placeholder="Enter social media URL" name="social" id="uSocial" required>
+      </div>
+
+      <div>
+        <label for="address"><b>Address</b></label>
+        <textarea id="uAddress" name="address" rows="4" cols="50" maxlength="200"></textarea>
+      </div>
+
+      <div>
+        <input type="button" value="Submit" onclick="submitForm()">
+      </div>
+    </div>
+  </form>
+
+  <script>
+    function submitForm() {
+
+      let userData = {};
+      let alerMessage = "";
+
+      const validateName = document.getElementById("uName").value;
+      if (!/^[a-zA-Z\s]*$/.test(validateName)) {
+        alerMessage += "Entred name must be max 50 character with no number/special characters";
+
+      }
+
+      const validateSurname = document.getElementById("uSurname").value;
+      if (!/^[a-zA-Z\s]*$/.test(validateSurname)) {
+        alerMessage += "Entred surname must be max 50 character with no number/special characters)";
+      }
+
+      const validatePhoneNumber = document.getElementById("uPhoneNumber").value;
+      const prefix = validatePhoneNumber.slice(0, 3)
+      if (!/^0[46]1\d{7}$/.test(validatePhoneNumber)) {
+        alerMessage += "Entered phonenumber must begin with '041' or '061' and be 10 number long";
+      }
+
+      const validateBirthDate = document.getElementById("uBirthday").value;
+      const todayDate = new Date();
+
+      const birthday = new Date(validateBirthDate);
+
+      const age = todayDate.getFullYear() - birthday.getFullYear();
+
+      if (age < 10) {
+        alerMessage += "You must be older than 10 to complete this form";
+      }
+
+      const validateEmail = document.getElementById("uEmail").value;
+      if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(validateEmail)) {
+        alerMessage += "Entered email address format must be e.g., example@hots.com";
+
+      }
+
+      const validateSocial = document.getElementById("uSocial").value;
+      if (!/^https?:\/\/(www\.)?(instagram\.com|twitter\.com|linkedin\.com)\/[\w-]+\/?$/.test(validateSocial)) {
+        alerMessage += "Entered Instagram, Twitter, or LinkedIn URL is not in correct format";
+
+      }
+
+      if (alerMessage === "") {
+        alert("Succesfully submitted form!");
+
+
+        userData = {
+          name: document.getElementById("uName").value,
+          surname: document.getElementById("uSurname").value,
+          phonenumber: document.getElementById("uPhoneNumber").value,
+          birthday: document.getElementById("uBirthday").value,
+          email: document.getElementById("uEmail").value,
+          social: document.getElementById("uSocial").value,
+          address: document.getElementById("uAddress").value,
+        };
+
+        const xhttp = new XMLHttpRequest();
+
+        xhttp.open("POST","/api/users",true)
+        xhttp.setRequestHeader("Content-Type","application/json");
+
+        xhttp.send(JSON.stringify(userData));
+
+        // Handle the response if needed
+        xhttp.onreadystatechange = function () {
+          if (this.readyState === 4) {
+            if (this.status === 200) {
+              alert("User created successfully!");
+            } else {
+              alert("Failed to create user.");
+              console.log(this.status);
+            }
+          }
+        };    
+
+      } else {
+        alert("Your credentails has errors:\n" + alerMessage);
+      }
+    }
+
+  </script>
+</body>
+
+</html>

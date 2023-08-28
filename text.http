@@ -1,0 +1,37 @@
+GET http://localhost:3000 HTTP/1.1
+###
+//above wont work because not https
+
+GET https://localhost:3000/test HTTP/1.1
+###
+GET https://localhost:3000 HTTP/1.1
+###
+GET https://localhost:3000/api/orders HTTP/1.1
+###
+GET https://localhost:3000/api HTTP/1.1
+
+###
+POST https://localhost:3000/api/fruits HTTP/1.1
+Content-Type: application/json
+
+{
+    "id": "4",
+    "name": "Pear"
+}
+
+###
+POST https://localhost:3000/api/users HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "John",
+    "surname": "Doe",
+    "phonenumber": "0411234567",
+    "birthday": "2000-01-01",
+    "email": "john.doe@example.com",
+    "social": "https://www.linkedin.com/feed/",
+    "address": "123 Main Street, City"
+}
+
+###
+GET https://localhost:3000/api/fruits HTTP/1.1
